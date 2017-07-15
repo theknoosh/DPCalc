@@ -10,10 +10,20 @@ import WatchKit
 import Foundation
 
 
+enum modes {
+    case NOT_SET
+    case ADDITION
+    case SUBTRACTION
+}
+
 class InterfaceController: WKInterfaceController {
     
-    @IBOutlet var label: WKInterfaceLabel!
+    var labelString:String = "0"
+    var currentMode:modes = modes.NOT_SET
+    var savedNum:Int64 = 0
+    var lastButtonWasMode = false
     
+    @IBOutlet var label: WKInterfaceLabel!
     @IBAction func tapped0() {tappedNumber(num: 0)}
     @IBAction func tapped1() {tappedNumber(num: 1)}
     @IBAction func tapped2() {tappedNumber(num: 2)}
@@ -27,22 +37,63 @@ class InterfaceController: WKInterfaceController {
 
     
     func tappedNumber(num:Int){
-        
+        if lastButtonWasMode {
+            lastButtonWasMode = false
+            labelString = "0"
+        }
+        labelString = labelString.appending("\(num)")
+        updateText()
+    }
+    
+    func updateText(){
+        guard let labelInt:Int64 = Int64(labelString) else {
+            label.setText("number is too large")
+            return
+        }
+        savedNum = (currentMode == modes.NOT_SET) ? labelInt : savedNum
+        label.setText("\(labelInt)")
+    }
+    
+    func changeMode(_ newMode:modes){
+        if savedNum == 0 {
+            return
+        }
+        currentMode = newMode
+        lastButtonWasMode = true
     }
 
     @IBAction func tappedPlus(){
-        
+        changeMode(modes.ADDITION)
     }
     
     @IBAction func tappedMinus(){
-        
+        changeMode(modes.SUBTRACTION)
     }
 
     @IBAction func tappedClear(){
-        
+        savedNum = 0
+        labelString = "0"
+        label.setText("0")
+        currentMode = modes.NOT_SET
+        lastButtonWasMode = false
     }
 
     @IBAction func tappedEquals(){
+        guard  let num:Int64 = Int64(labelString) else {
+            return
+        }
+        if currentMode == modes.NOT_SET || lastButtonWasMode {
+            return
+        }
+        if currentMode == modes.ADDITION {
+            savedNum += num
+        } else if currentMode == modes.SUBTRACTION {
+            savedNum -= num
+        }
+        currentMode = modes.NOT_SET
+        labelString = "\(savedNum)"
+        updateText()
+        lastButtonWasMode = true
         
     }
 
