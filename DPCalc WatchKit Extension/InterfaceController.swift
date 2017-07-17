@@ -51,7 +51,13 @@ class InterfaceController: WKInterfaceController {
             return
         }
         savedNum = (currentMode == modes.NOT_SET) ? labelInt : savedNum
-        label.setText("\(labelInt)")
+        
+        let formatter:NumberFormatter = NumberFormatter()
+        formatter.numberStyle = NumberFormatter.Style.decimal
+        let nsInt:NSNumber = labelInt as NSNumber
+        let str:String = formatter.string(from: nsInt)!
+        
+        label.setText(str)
     }
     
     func changeMode(_ newMode:modes){

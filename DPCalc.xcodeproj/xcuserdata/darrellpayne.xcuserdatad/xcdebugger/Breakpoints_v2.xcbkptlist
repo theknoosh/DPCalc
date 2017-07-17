@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DPCalc WatchKit Extension/InterfaceController.swift"
-            timestampString = "521788998.383629"
+            timestampString = "521826508.846282"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "tappedEquals()"
             landmarkType = "7">
          </BreakpointContent>
